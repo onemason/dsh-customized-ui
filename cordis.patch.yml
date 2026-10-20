@@ -1,0 +1,3 @@
+- insert:
+    - id: customized-ui
+      name: '@local/customized-ui'

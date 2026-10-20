@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Customized UI">
+  <defs>
+    <linearGradient id="cu-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3d6bdc"/>
+      <stop offset="1" stop-color="#7a5bc9"/>
+    </linearGradient>
+    <linearGradient id="cu-glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".58"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity=".20"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#cu-bg)"/>
+  <rect x="9" y="12" width="46" height="40" rx="9" fill="url(#cu-glass)" stroke="#ffffff" stroke-opacity=".48" stroke-width="1.2"/>
+  <circle cx="24" cy="27" r="5.5" fill="#ffffff"/>
+  <path d="M15 43c0-5 4-9 9-9s9 4 9 9" fill="#ffffff" opacity=".92"/>
+  <g stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity=".9">
+    <path d="M38 24h12"/>
+    <path d="M38 32h12"/>
+    <path d="M38 40h12"/>
+    <circle cx="45" cy="24" r="2.2" fill="#ffffff" stroke="none"/>
+    <circle cx="41" cy="32" r="2.2" fill="#ffffff" stroke="none"/>
+    <circle cx="48" cy="40" r="2.2" fill="#ffffff" stroke="none"/>
+  </g>
+</svg>
