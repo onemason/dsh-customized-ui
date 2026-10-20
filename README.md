@@ -1,63 +1,35 @@
 # Customized UI
 
-A local [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) bundle that collects several personal UI refinements for the Harness Web/Desktop client into one plugin.
+DeepSeek Harness 界面定制 bundle 的变更清单。
 
-## Features
+## 左侧栏
 
-- **Frosted Settings sheet** — a translucent, blurred Settings panel with custom navigation, cards, switches, inputs, and account actions.
-- **Personalized sidebar identity** — the signed-in person's avatar and name replace the shipped sidebar brand/account seats; the launcher opens Settings and the account menu supports sign-out.
-- **Settings header cleanup** — removes the shipped `Open configuration file` action from the Settings header.
-- **Sidebar cleanup** — hides the `New Session` button (the `Cmd/Ctrl+N` shortcut still works), renames the `Automation tasks` entry to `Tasks`, and renders the left sidebar as a solid surface instead of the translucent window material.
-- **Frosted chrome** — menu popovers, hover cards, and tooltips use the same dark glass material as the Settings sheet.
-- **Background-jobs auto-hide** — the header's background-jobs chip disappears as soon as no job is running, instead of lingering with a finished-job count.
+- 品牌标识与名称替换为当前登录账号的头像和姓名；未登录时显示 `Sign In`，点击进入 DeepSeek 登录引导；已登录时点击打开设置。
+- 隐藏 `New Session` 按钮；`Cmd+N` 快捷键仍然可用。
+- `Automation tasks` 入口名称改为 `Tasks`（英文界面）。
+- 侧边栏底色改为实色，不再透出桌面或窗口材质。
+- 工作区/会话行高度调整为 28px，Session 标题字号调整为 13px，并收紧列表间距。
+- 工作区头部搜索、筛选、新建三个图标按钮悬停时不再弹出 Tooltip。
 
-## Preview
+## 顶栏与后台任务
 
-The frosted Settings sheet, popovers, hover cards, and solid sidebar are designed for the **dark theme on macOS**. Light theme and other platforms keep the shipped surfaces for most of the theme-specific rules; the functional tweaks (New Session hidden, Tasks label, jobs chip auto-hide) are global.
+- 后台任务入口在没有运行中任务（状态圆点消失）时自动隐藏，不再保留 `N background jobs` 文案。
+- 有运行中任务时仍显示状态圆点和任务数量。
 
-## Requirements
+## 设置页
 
-- DeepSeek Harness Desktop or Web with a profile that supports local bundles (`dsh.bundle.patch`).
-- The client-side APIs used here: `slots`, `locale`, `remote`, and `remote.account`.
+- 深色模式下设置页改为磨砂玻璃：半透明背景、模糊效果，导航栏、头部、卡片和账户卡片统一为玻璃层级。
+- 移除设置页头部的 `Open configuration file` 按钮。
+- 账户卡片里的原生账户信息链接改为 `Sign Out` 按钮，并处理退出中、退出失败状态。
+- 统一设置页内的按钮、下拉选择器、主题选择块、步进器、开关、输入框、滚动条和焦点环样式。
+- 系统开启“减少透明度”时回退为实色。
 
-## Installation
+## 弹层
 
-This is a local bundle. Install it through the Harness Plugin Manager with the absolute path to this directory, for example:
+- 菜单弹层、悬停卡片、Tooltip 改为与设置页一致的深色磨砂玻璃。
+- 系统开启“减少透明度”时回退为实色。
 
-```text
-plugin_manager install_bundle target=/absolute/path/to/customized-ui
-```
+## 生效范围
 
-The installer links the package into the current profile and adds it to `dsh.profile.bundles`. Reload the Harness page after installation if the running client does not pick up the new bundle automatically.
-
-To remove it, use the Plugin Manager's `remove_bundle` action with `@local/customized-ui`.
-
-## Files
-
-| File | Purpose |
-| --- | --- |
-| `index.js` | Host half of the bundle. Registers no Host service; exists so the bundle has a loadable Host row. |
-| `client.js` | All rendering and styling: the browser module registered through `window.__ModuleLoader__.load`, including the frosted styles, sidebar identity, slot takeovers, and the jobs-chip rule. |
-| `cordis.patch.yml` | Loader patch that inserts the `customized-ui` row into the profile. |
-| `locale/en.json`, `locale/zh.json` | Display title and description used by the Plugin Manager and Settings. |
-| `icon.svg` | Bundle icon. |
-
-## How it works
-
-The bundle is intentionally build-free: `client.js` is plain JavaScript and is loaded directly by the Harness client module loader.
-
-- **Theme styles** are injected into `<head>` from `apply()` with `ctx.effect`, so unloading the plugin removes them.
-- **Brand and account seats** are replaced through `ctx.slots.inject` / `ctx.slots.register` using the `sidebar.brand.mark`, `sidebar.brand.name`, and `settings.launcher` slots.
-- **Settings header action** takes over the shipped `open-document` cell in the `settings.action` slot and renders nothing.
-- **Account identity** is read from the signed-in account at runtime (`remote.account`); no personal name or avatar is stored in this repository.
-- **Small DOM-level rules** (the `Tasks` label and the jobs-chip visibility) are pure CSS, so they do not interfere with React rendering.
-
-## Customization notes
-
-- Frosted styling is scoped by `SETTINGS_ROOT` in `client.js` (`[data-platform="darwin"]` plus the dark theme). Widen or narrow that selector to change which themes/platforms receive the glass treatment.
-- The `Tasks` rename matches the English accessible label `Automation tasks`. If the UI language changes, update the selector in the `CSS` array.
-- The sidebar identity uses the live account profile. To use a fixed identity instead, replace the `useAccountIdentity` result in `AccountLauncher`.
-
-## License
-
-No license is included in this repository. Add one before redistributing the plugin.
+- 磨砂相关样式仅在 macOS 深色主题下生效；实色侧边栏仅在 macOS 下生效。
+- `New Session` 隐藏、`Tasks` 改名、后台任务入口自动隐藏为全局规则。
