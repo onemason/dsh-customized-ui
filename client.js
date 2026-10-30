@@ -7,9 +7,13 @@ window.__ModuleLoader__.load({
     const NS = 'sidebar.identity';
     const CLIENT_VERSION =
       (globalThis.__DSH_BOOT__ && globalThis.__DSH_BOOT__.version) || '0.2.1-rc.1';
+    /* Shown only while the signed-in Platform profile is unavailable. */
+    const FALLBACK_NAME = 'Ryan Peng';
+    const FALLBACK_AVATAR = 'https://avatars.githubusercontent.com/u/7850227?v=4';
 
     const en = {
       menu: 'Account menu',
+      account: 'Account',
       settings: 'Settings',
       signIn: 'Sign In',
       signOut: 'Sign Out',
@@ -22,6 +26,7 @@ window.__ModuleLoader__.load({
     };
     const zh = {
       menu: '账户菜单',
+      account: '账户',
       settings: '设置',
       signIn: '登录',
       signOut: '退出登录',
@@ -89,6 +94,8 @@ window.__ModuleLoader__.load({
       '.dsh-identity-button:disabled{opacity:.55;cursor:default}',
       '.dsh-identity-button.dsh-identity-danger{color:var(--dsw-alias-state-error-primary);border-color:color-mix(in srgb,var(--dsw-alias-state-error-primary) 35%,transparent)}',
       '.dsh-identity-error{margin-top:8px;font-size:12px;line-height:18px;color:var(--dsw-alias-state-error-primary)}',
+      /* Model picker: drop the shipped "1017" release badge; the name keeps the freed space. */
+      '[data-model-id="deepseek-flash"] [class*="_7yQ_Pa_label"]>*:not(:first-child){display:none !important}',
     ].join('');
 
     /* Effective dark theme only: light mode keeps the shipped Settings surface. */
@@ -618,7 +625,8 @@ window.__ModuleLoader__.load({
             try {
               for await (const frame of account.watch(controller.signal)) {
                 if (disposed) return;
-                const view = frame && frame.value;
+                const view =
+                  frame && typeof frame === 'object' && frame.value !== undefined ? frame.value : frame;
                 setSnapshot((previous) => ({ ...previous, view }));
                 if (frame && typeof frame.accept === 'function') frame.accept();
                 void readProfile();
@@ -671,12 +679,12 @@ window.__ModuleLoader__.load({
       const { view, profile } = useAccountIdentity(ctx);
       const ready = profile && profile.status === 'ready' ? profile.value : undefined;
       const status = view && view.status;
-      const signedOut =
-        status === 'signed-out' || (!status && Boolean(profile) && profile.status !== 'ready');
-      const signedIn = !signedOut && (Boolean(ready) || status === 'credential-stored');
+      const signedOut = status === 'signed-out';
+      const signedIn = status !== 'signed-out' && (status === 'credential-stored' || (!status && Boolean(ready)));
+      const fallbackName = signedIn ? FALLBACK_NAME : '';
       const liveName = ready ? ready.name || '' : '';
-      const displayName = signedOut ? t('signIn') : liveName;
-      const avatarSrc = signedIn && ready ? ready.avatarUrl || '' : '';
+      const displayName = signedOut ? t('signIn') : liveName || fallbackName || (signedIn ? t('account') : '');
+      const avatarSrc = signedIn ? (ready && ready.avatarUrl) || FALLBACK_AVATAR : '';
 
       const [avatarFailed, setAvatarFailed] = React.useState(false);
       React.useEffect(() => {
@@ -752,7 +760,7 @@ window.__ModuleLoader__.load({
         }
       };
 
-      const initials = signedIn ? initialsOf(liveName) : '';
+      const initials = signedIn ? initialsOf(liveName || fallbackName) : '';
       const avatar = h(
         'span',
         { className: 'dsh-identity-avatar', 'aria-hidden': 'true' },

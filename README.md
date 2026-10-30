@@ -4,7 +4,8 @@ DeepSeek Harness 界面定制 bundle 的变更清单。
 
 ## 左侧栏
 
-- 品牌标识与名称替换为当前登录账号的头像和姓名；未登录时显示 `Sign In`，点击进入 DeepSeek 登录引导；已登录时点击打开设置。
+- 左下角改为读取账号流的真实状态：登录后显示账号头像和姓名，不再误显示 `Sign In`；未登录时才显示 `Sign In`，点击进入 DeepSeek 登录引导。
+- DeepSeek 资料接口不可用时，使用本地回退头像和名称（`Ryan Peng`）。
 - 隐藏 `New Session` 按钮；`Cmd+N` 快捷键仍然可用。
 - `Automation tasks` 入口名称改为 `Tasks`（英文界面）。
 - 侧边栏底色改为实色，不再透出桌面或窗口材质。
