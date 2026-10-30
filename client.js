@@ -75,6 +75,11 @@ window.__ModuleLoader__.load({
       '.dsh-identity-initials{font-size:10px;font-weight:600;line-height:24px;letter-spacing:.02em}',
       '.dsh-identity-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
       '.dsh-identity-root[data-collapsed="true"] .dsh-identity-name{display:none}',
+      /* Settings account card fallback while the Platform profile is unavailable. */
+      `[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="avatar"]{background-image:url(${JSON.stringify(FALLBACK_AVATAR)});background-size:cover;background-position:center}`,
+      '[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="avatar"] > *{visibility:hidden}',
+      '[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="name"]{font-size:0 !important;color:transparent !important}',
+      `[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="name"]::after{content:${JSON.stringify(FALLBACK_NAME)};font-size:14px !important;color:var(--dsw-alias-label-primary) !important;line-height:22px;font-weight:500}`,
       '.dsh-identity-menu{position:absolute;left:0;bottom:calc(100% + 6px);z-index:40;box-sizing:border-box;width:220px;padding:4px;border:.5px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-lg,12px);background:var(--dsw-alias-bg-overlay);color:var(--dsw-alias-label-primary);box-shadow:0 8px 24px color-mix(in srgb,var(--dsw-alias-label-primary) 12%,transparent)}',
       /* Frosted popover: the Desktop sidebar is bare window material, so the menu stays translucent too. */
       '[data-platform="darwin"] .dsh-identity-menu{background:color-mix(in srgb,var(--dsw-alias-bg-layer-2) 34%,transparent);-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);box-shadow:var(--dsw-elevation-prominent)}',
@@ -1034,6 +1039,36 @@ window.__ModuleLoader__.load({
             root.style.removeProperty('--cu-signout-failed');
           };
         }, 'customized-ui: account sign out');
+
+        /*
+         * The Platform profile endpoint can fail, leaving the shipped Settings
+         * account card with a generic icon and no name. Show the local identity
+         * there while that profile is unavailable; the live card replaces it as
+         * soon as the profile loads.
+         */
+        ctx.effect(() => {
+          const sync = () => {
+            const panel = document.querySelector('[data-shortcut-modal="settings"]');
+            if (!panel) return;
+            for (const copy of panel.querySelectorAll('[class*="identityCopy"]')) {
+              const identity = copy.parentElement;
+              if (!identity || !identity.querySelector('[class*="avatar"]')) continue;
+              const name = copy.querySelector('[class*="name"]');
+              const status = copy.querySelector('[class*="status"]');
+              const genericName =
+                name !== null &&
+                /^(Signed in to DeepSeek|已登录 DeepSeek)$/.test((name.textContent || '').trim());
+              const unavailable =
+                status !== null &&
+                /Account details are not available yet|账号资料暂不可用/.test(status.textContent || '');
+              identity.classList.toggle('dsh-cu-fallback', Boolean(genericName && unavailable));
+            }
+          };
+          const observer = new MutationObserver(sync);
+          observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+          sync();
+          return () => observer.disconnect();
+        }, 'customized-ui: settings account fallback');
 
         const hidden = -1;
         /* Shadow a shipped seat with an empty cell; a list cell reuses its shipped id. */
