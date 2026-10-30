@@ -7,9 +7,6 @@ window.__ModuleLoader__.load({
     const NS = 'sidebar.identity';
     const CLIENT_VERSION =
       (globalThis.__DSH_BOOT__ && globalThis.__DSH_BOOT__.version) || '0.2.1-rc.1';
-    /* Shown only while the signed-in Platform profile is unavailable. */
-    const FALLBACK_NAME = 'Ryan Peng';
-    const FALLBACK_AVATAR = 'https://avatars.githubusercontent.com/u/7850227?v=4';
 
     const en = {
       menu: 'Account menu',
@@ -75,11 +72,6 @@ window.__ModuleLoader__.load({
       '.dsh-identity-initials{font-size:10px;font-weight:600;line-height:24px;letter-spacing:.02em}',
       '.dsh-identity-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
       '.dsh-identity-root[data-collapsed="true"] .dsh-identity-name{display:none}',
-      /* Settings account card fallback while the Platform profile is unavailable. */
-      `[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="avatar"]{background-image:url(${JSON.stringify(FALLBACK_AVATAR)});background-size:cover;background-position:center}`,
-      '[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="avatar"] > *{visibility:hidden}',
-      '[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="name"]{font-size:0 !important;color:transparent !important}',
-      `[data-shortcut-modal="settings"] .dsh-cu-fallback [class*="name"]::after{content:${JSON.stringify(FALLBACK_NAME)};font-size:14px !important;color:var(--dsw-alias-label-primary) !important;line-height:22px;font-weight:500}`,
       '.dsh-identity-menu{position:absolute;left:0;bottom:calc(100% + 6px);z-index:40;box-sizing:border-box;width:220px;padding:4px;border:.5px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-lg,12px);background:var(--dsw-alias-bg-overlay);color:var(--dsw-alias-label-primary);box-shadow:0 8px 24px color-mix(in srgb,var(--dsw-alias-label-primary) 12%,transparent)}',
       /* Frosted popover: the Desktop sidebar is bare window material, so the menu stays translucent too. */
       '[data-platform="darwin"] .dsh-identity-menu{background:color-mix(in srgb,var(--dsw-alias-bg-layer-2) 34%,transparent);-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);box-shadow:var(--dsw-elevation-prominent)}',
@@ -686,10 +678,9 @@ window.__ModuleLoader__.load({
       const status = view && view.status;
       const signedOut = status === 'signed-out';
       const signedIn = status !== 'signed-out' && (status === 'credential-stored' || (!status && Boolean(ready)));
-      const fallbackName = signedIn ? FALLBACK_NAME : '';
       const liveName = ready ? ready.name || '' : '';
-      const displayName = signedOut ? t('signIn') : liveName || fallbackName || (signedIn ? t('account') : '');
-      const avatarSrc = signedIn ? (ready && ready.avatarUrl) || FALLBACK_AVATAR : '';
+      const displayName = signedOut ? t('signIn') : liveName || (signedIn ? t('account') : '');
+      const avatarSrc = signedIn ? (ready && ready.avatarUrl) || '' : '';
 
       const [avatarFailed, setAvatarFailed] = React.useState(false);
       React.useEffect(() => {
@@ -765,7 +756,7 @@ window.__ModuleLoader__.load({
         }
       };
 
-      const initials = signedIn ? initialsOf(liveName || fallbackName) : '';
+      const initials = signedIn ? initialsOf(liveName) : '';
       const avatar = h(
         'span',
         { className: 'dsh-identity-avatar', 'aria-hidden': 'true' },
