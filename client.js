@@ -687,6 +687,25 @@ window.__ModuleLoader__.load({
         setAvatarFailed(false);
       }, [avatarSrc]);
 
+      /*
+       * The shipped account menu refreshed profile and balance when Settings
+       * opened. Our launcher replaces that menu, so trigger the same refresh
+       * from the account section's own inject face when Settings opens.
+       */
+      React.useEffect(() => {
+        if (!props.settingsOpen) return;
+        try {
+          const entry = ctx.slots
+            .entries('settings.section')
+            .find((candidate) => candidate.options.id === 'account');
+          const operations =
+            entry && typeof entry.inject === 'function' ? entry.inject() : undefined;
+          if (operations && typeof operations.refreshAccount === 'function') {
+            void operations.refreshAccount();
+          }
+        } catch {}
+      }, [ctx, props.settingsOpen]);
+
       const [open, setOpen] = React.useState(false);
       const [confirming, setConfirming] = React.useState(false);
       const [busy, setBusy] = React.useState(false);
@@ -1030,36 +1049,6 @@ window.__ModuleLoader__.load({
             root.style.removeProperty('--cu-signout-failed');
           };
         }, 'customized-ui: account sign out');
-
-        /*
-         * The Platform profile endpoint can fail, leaving the shipped Settings
-         * account card with a generic icon and no name. Show the local identity
-         * there while that profile is unavailable; the live card replaces it as
-         * soon as the profile loads.
-         */
-        ctx.effect(() => {
-          const sync = () => {
-            const panel = document.querySelector('[data-shortcut-modal="settings"]');
-            if (!panel) return;
-            for (const copy of panel.querySelectorAll('[class*="identityCopy"]')) {
-              const identity = copy.parentElement;
-              if (!identity || !identity.querySelector('[class*="avatar"]')) continue;
-              const name = copy.querySelector('[class*="name"]');
-              const status = copy.querySelector('[class*="status"]');
-              const genericName =
-                name !== null &&
-                /^(Signed in to DeepSeek|已登录 DeepSeek)$/.test((name.textContent || '').trim());
-              const unavailable =
-                status !== null &&
-                /Account details are not available yet|账号资料暂不可用/.test(status.textContent || '');
-              identity.classList.toggle('dsh-cu-fallback', Boolean(genericName && unavailable));
-            }
-          };
-          const observer = new MutationObserver(sync);
-          observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-          sync();
-          return () => observer.disconnect();
-        }, 'customized-ui: settings account fallback');
 
         const hidden = -1;
         /* Shadow a shipped seat with an empty cell; a list cell reuses its shipped id. */
