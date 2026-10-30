@@ -36,11 +36,12 @@ window.__ModuleLoader__.load({
     };
 
     const CSS = [
-      /* Solid sidebar: drop the translucent window material behind the rail. */
+      /* Mostly solid sidebar with a subtle frosted lift from the window behind. */
       '[data-platform="darwin"] [class*="sidebarCol"]{',
-      '  background: var(--dsw-specific-sidebar-fill) !important;',
-      '  -webkit-backdrop-filter: none !important;',
-      '  backdrop-filter: none !important;',
+      '  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0) 38%), color-mix(in srgb, var(--dsw-specific-sidebar-fill) 84%, transparent) !important;',
+      '  -webkit-backdrop-filter: blur(20px) saturate(130%) !important;',
+      '  backdrop-filter: blur(20px) saturate(130%) !important;',
+      '  box-shadow: inset 0 .5px 0 rgba(255,255,255,.06) !important;',
       '}',
       /* Auto-hide the background-jobs chip once no job is live. */
       '[data-slot="conversation.session.header.actions"] button[class*="_trigger"]:not(:has([class*="triggerDot"])){display:none !important}',
