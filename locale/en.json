@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Customized UI",
-    "description": "Combines the frosted Settings styling, the signed-in person's avatar and name at the sidebar foot, and the removal of the Settings header configuration-file action in one bundle."
+    "description": "Frosted dark Settings and sidebar styling, a signed-in account launcher with confirm-on-second-click sign out, localized Tasks panel naming, and removal of extra actions and the temporary model badge."
   }
 }

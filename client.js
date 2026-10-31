@@ -11,28 +11,22 @@ window.__ModuleLoader__.load({
     const en = {
       menu: 'Account menu',
       account: 'Account',
-      settings: 'Settings',
       signIn: 'Sign In',
       signOut: 'Sign Out',
       signingOut: 'Signing out…',
+      signOutConfirm: 'Confirm sign out',
       signOutFailedShort: 'Sign Out failed',
-      signOutTitle: 'Sign out of DeepSeek?',
-      signOutBody: 'You can sign in again at any time.',
-      cancel: 'Cancel',
-      signOutFailed: 'Could not sign out. Try again.',
+      tasks: 'Tasks',
     };
     const zh = {
       menu: '账户菜单',
       account: '账户',
-      settings: '设置',
       signIn: '登录',
       signOut: '退出登录',
       signingOut: '正在退出…',
+      signOutConfirm: '确认退出登录',
       signOutFailedShort: '退出失败',
-      signOutTitle: '退出 DeepSeek 登录？',
-      signOutBody: '你随时可以重新登录。',
-      cancel: '取消',
-      signOutFailed: '退出失败，请重试。',
+      tasks: '任务',
     };
 
     const CSS = [
@@ -56,9 +50,6 @@ window.__ModuleLoader__.load({
       '[data-slot="sidebar"] button[class*="newSession"]{display:none}',
       '[data-slot="sidebar"] nav{gap:2px;margin-bottom:4px}',
       '[data-slot="sidebar"] nav button{height:32px;min-height:32px;padding:5px 8px;margin:0}',
-      /* Rename the Automation tasks page to Tasks in the sidebar. */
-      '[data-slot="sidebar"] button[aria-label="Automation tasks"] span[class*="panelTitle"]{display:none}',
-      '[data-slot="sidebar"] button[aria-label="Automation tasks"]:has(span[class*="panelTitle"])::after{content:"Tasks";font-size:14px;line-height:22px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}',
       '[data-slot="sidebar.workspaces"] > div > div:first-child:has(> span){height:32px;margin-top:0;margin-bottom:2px}',
       '[data-slot="sidebar.settings"] div:has(> [data-slot="settings.launcher"]){margin:2px -2px}',
       '.dsh-identity-root{position:relative;flex:1;width:100%;min-width:0}',
@@ -73,27 +64,6 @@ window.__ModuleLoader__.load({
       '.dsh-identity-initials{font-size:10px;font-weight:600;line-height:24px;letter-spacing:.02em}',
       '.dsh-identity-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
       '.dsh-identity-root[data-collapsed="true"] .dsh-identity-name{display:none}',
-      '.dsh-identity-menu{position:absolute;left:0;bottom:calc(100% + 6px);z-index:40;box-sizing:border-box;width:220px;padding:4px;border:.5px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-lg,12px);background:var(--dsw-alias-bg-overlay);color:var(--dsw-alias-label-primary);box-shadow:0 8px 24px color-mix(in srgb,var(--dsw-alias-label-primary) 12%,transparent)}',
-      /* Frosted popover: the Desktop sidebar is bare window material, so the menu stays translucent too. */
-      '[data-platform="darwin"] .dsh-identity-menu{background:color-mix(in srgb,var(--dsw-alias-bg-layer-2) 34%,transparent);-webkit-backdrop-filter:blur(40px) saturate(150%);backdrop-filter:blur(40px) saturate(150%);box-shadow:var(--dsw-elevation-prominent)}',
-      /* Reduced transparency keeps the menu solid and readable. */
-      '@media (prefers-reduced-transparency: reduce){[data-platform="darwin"] .dsh-identity-menu{background:var(--dsw-alias-bg-overlay);-webkit-backdrop-filter:none;backdrop-filter:none}}',
-      '.dsh-identity-item{display:flex;align-items:center;gap:8px;width:100%;height:36px;padding:0 10px;border:0;border-radius:var(--dsw-radius-md,8px);background:transparent;color:inherit;font:inherit;font-size:13px;line-height:20px;text-align:left;cursor:pointer}',
-      '.dsh-identity-item:hover{background:var(--dsw-alias-interactive-bg-hover)}',
-      '.dsh-identity-item:focus-visible{outline:var(--dsw-focus-ring-width,2px) solid var(--dsw-focus-ring-color,var(--dsw-alias-brand-primary));outline-offset:-2px}',
-      '.dsh-identity-item svg{flex:none;width:16px;height:16px;color:var(--dsw-alias-label-secondary)}',
-      '.dsh-identity-confirm{padding:10px 10px 8px}',
-      '.dsh-identity-confirm-title{font-size:13px;font-weight:500;line-height:20px}',
-      '.dsh-identity-confirm-body{margin-top:2px;font-size:12px;line-height:18px;color:var(--dsw-alias-label-secondary)}',
-      '.dsh-identity-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}',
-      '.dsh-identity-button{height:28px;padding:0 10px;border:.5px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-md,8px);background:transparent;color:var(--dsw-alias-label-primary);font:inherit;font-size:12px;line-height:18px;cursor:pointer}',
-      '.dsh-identity-button:hover{background:var(--dsw-alias-interactive-bg-hover)}',
-      '.dsh-identity-button:focus-visible{outline:var(--dsw-focus-ring-width,2px) solid var(--dsw-focus-ring-color,var(--dsw-alias-brand-primary));outline-offset:-2px}',
-      '.dsh-identity-button:disabled{opacity:.55;cursor:default}',
-      '.dsh-identity-button.dsh-identity-danger{color:var(--dsw-alias-state-error-primary);border-color:color-mix(in srgb,var(--dsw-alias-state-error-primary) 35%,transparent)}',
-      '.dsh-identity-error{margin-top:8px;font-size:12px;line-height:18px;color:var(--dsw-alias-state-error-primary)}',
-      /* Model picker: drop the shipped "1017" release badge; the name keeps the freed space. */
-      '[data-model-id="deepseek-flash"] [class*="_7yQ_Pa_label"]>*:not(:first-child){display:none !important}',
     ].join('');
 
     /* Effective dark theme only: light mode keeps the shipped Settings surface. */
@@ -248,29 +218,6 @@ window.__ModuleLoader__.load({
       '  font-size: 12.5px;',
       '  color: rgba(249,250,251,.55);',
       '}',
-      SETTINGS_SCOPE + ' a[class*="accountInfo"]{',
-      '  height: 28px;',
-      '  padding: 0 10px;',
-      '  margin-right: -8px;',
-      '  border-radius: 8px;',
-      '  gap: 4px;',
-      '  font-size: 12.5px;',
-      '  font-weight: 500;',
-      '  color: rgba(249,250,251,.64);',
-      '  transition: background-color .15s ease, color .15s ease;',
-      '}',
-      SETTINGS_SCOPE + ' a[class*="accountInfo"]:hover{',
-      '  background: rgba(255,255,255,.06);',
-      '  color: #f9fafb;',
-      '}',
-      SETTINGS_SCOPE + ' a[class*="accountInfo"] svg{',
-      '  opacity: .7;',
-      '  transition: transform .16s ease, opacity .16s ease;',
-      '}',
-      SETTINGS_SCOPE + ' a[class*="accountInfo"]:hover svg{',
-      '  opacity: 1;',
-      '  transform: translate(1px, -1px);',
-      '}',
       SETTINGS_SCOPE + ' [class*="amount"]{',
       '  font-size: 19px;',
       '  font-weight: 600;',
@@ -317,6 +264,13 @@ window.__ModuleLoader__.load({
       '}',
       SETTINGS_SCOPE + ' a[class*="accountInfo"][data-customized-state="failed"]::after{',
       '  content: var(--cu-signout-failed, "Sign Out failed");',
+      '}',
+      SETTINGS_SCOPE + ' a[class*="accountInfo"][data-customized-state="confirm"]{',
+      '  background: color-mix(in srgb, var(--dsw-alias-state-error-primary) 24%, transparent);',
+      '  border-color: color-mix(in srgb, var(--dsw-alias-state-error-primary) 70%, transparent);',
+      '}',
+      SETTINGS_SCOPE + ' a[class*="accountInfo"][data-customized-state="confirm"]::after{',
+      '  content: var(--cu-signout-confirm, "Confirm sign out");',
       '}',
       SETTINGS_SCOPE + ' a[class*="accountInfo"][aria-disabled="true"]{',
       '  opacity: .6;',
@@ -549,28 +503,37 @@ window.__ModuleLoader__.load({
       );
     }
 
-    function IconSettings() {
+    /** Decorative clock glyph for the Tasks panel row; the sidebar owns its label. */
+    function TasksIcon({ size }) {
+      const edge = Number.isFinite(size) && size > 0 ? size : 16;
       return h(
         'svg',
-        { viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': 'true' },
-        h('path', { d: 'M2 4.25h7M12 4.25h2M2 11.75h2M7 11.75h7', stroke: 'currentColor', strokeWidth: 1.4, strokeLinecap: 'round' }),
-        h('circle', { cx: 10.5, cy: 4.25, r: 1.75, stroke: 'currentColor', strokeWidth: 1.4 }),
-        h('circle', { cx: 5.5, cy: 11.75, r: 1.75, stroke: 'currentColor', strokeWidth: 1.4 }),
-      );
-    }
-
-    function IconSignOut() {
-      return h(
-        'svg',
-        { viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': 'true' },
+        {
+          viewBox: '0 0 16 16',
+          width: edge,
+          height: edge,
+          fill: 'none',
+          'aria-hidden': 'true',
+          focusable: 'false',
+        },
+        h('circle', { cx: 8, cy: 8, r: 5.75, stroke: 'currentColor', strokeWidth: 1.3 }),
         h('path', {
-          d: 'M6.25 2.75H4a1.25 1.25 0 0 0-1.25 1.25v8A1.25 1.25 0 0 0 4 13.25h2.25M10 5.5 12.5 8 10 10.5M6.75 8h5.5',
+          d: 'M8 4.75V8l2.25 1.5',
           stroke: 'currentColor',
-          strokeWidth: 1.4,
+          strokeWidth: 1.3,
           strokeLinecap: 'round',
           strokeLinejoin: 'round',
         }),
       );
+    }
+
+    /**
+     * Show the plain catalog model name. The shipped temporary 1017 decorator
+     * owns this single slot at default priority; a lower priority shadows it
+     * while keeping the owner's own fallback text for every other model.
+     */
+    function ModelLabel({ model }) {
+      return model && typeof model.name === 'string' ? model.name : null;
     }
 
     /** Account calls carry the same client identity the shipped account UI sends. */
@@ -702,78 +665,17 @@ window.__ModuleLoader__.load({
           const operations =
             entry && typeof entry.inject === 'function' ? entry.inject() : undefined;
           if (operations && typeof operations.refreshAccount === 'function') {
-            void operations.refreshAccount();
+            void Promise.resolve(operations.refreshAccount()).catch(() => {});
           }
         } catch {}
       }, [ctx, props.settingsOpen]);
 
-      const [open, setOpen] = React.useState(false);
-      const [confirming, setConfirming] = React.useState(false);
-      const [busy, setBusy] = React.useState(false);
-      const [error, setError] = React.useState('');
-      const root = React.useRef(null);
-
-      React.useEffect(() => {
-        if (!open) return undefined;
-        const dismiss = (event) => {
-          if (root.current && root.current.contains(event.target)) return;
-          setOpen(false);
-          setConfirming(false);
-          setError('');
-        };
-        const onKeyDown = (event) => {
-          if (event.key !== 'Escape') return;
-          setOpen(false);
-          setConfirming(false);
-          setError('');
-        };
-        document.addEventListener('pointerdown', dismiss, true);
-        document.addEventListener('keydown', onKeyDown);
-        return () => {
-          document.removeEventListener('pointerdown', dismiss, true);
-          document.removeEventListener('keydown', onKeyDown);
-        };
-      }, [open]);
-
-      const close = () => {
-        setOpen(false);
-        setConfirming(false);
-        setError('');
-      };
-
-      const toggle = () => {
-        setOpen((value) => !value);
-        setConfirming(false);
-        setError('');
-      };
-
       const openSettings = () => {
-        close();
         if (signedOut && typeof props.openOnboarding === 'function') {
           props.openOnboarding('deepseek-official');
           return;
         }
         if (typeof props.openSettings === 'function') props.openSettings();
-      };
-
-      const signOut = async () => {
-        const remote = ctx.get('remote');
-        const account = remote && remote.account;
-        if (!account || typeof account.signOut !== 'function') {
-          setError(t('signOutFailed'));
-          return;
-        }
-        setBusy(true);
-        setError('');
-        try {
-          const result = await account.signOut(accountClient(ctx));
-          if (result && result.ok === false) throw new Error('sign-out refused');
-          close();
-        } catch (failure) {
-          setError(t('signOutFailed'));
-        } finally {
-          setBusy(false);
-        }
       };
 
       const initials = signedIn ? initialsOf(liveName) : '';
@@ -793,81 +695,10 @@ window.__ModuleLoader__.load({
             : h(IconUser),
       );
 
-      const items = [
-        h(
-          'button',
-          {
-            key: 'settings',
-            type: 'button',
-            role: 'menuitem',
-            className: 'dsh-identity-item',
-            onClick: openSettings,
-          },
-          h(IconSettings),
-          h('span', null, t('settings')),
-        ),
-      ];
-
-      if (signedIn) {
-        items.push(
-          h(
-            'button',
-            {
-              key: 'sign-out',
-              type: 'button',
-              role: 'menuitem',
-              className: 'dsh-identity-item',
-              onClick: () => {
-                setConfirming(true);
-                setError('');
-              },
-            },
-            h(IconSignOut),
-            h('span', null, t('signOut')),
-          ),
-        );
-      }
-
-      const confirm = h(
-        'div',
-        { className: 'dsh-identity-confirm' },
-        h('div', { className: 'dsh-identity-confirm-title' }, t('signOutTitle')),
-        h('div', { className: 'dsh-identity-confirm-body' }, t('signOutBody')),
-        error ? h('div', { className: 'dsh-identity-error', role: 'alert' }, error) : null,
-        h(
-          'div',
-          { className: 'dsh-identity-actions' },
-          h(
-            'button',
-            {
-              type: 'button',
-              className: 'dsh-identity-button',
-              disabled: busy,
-              onClick: () => {
-                setConfirming(false);
-                setError('');
-              },
-            },
-            t('cancel'),
-          ),
-          h(
-            'button',
-            {
-              type: 'button',
-              className: 'dsh-identity-button dsh-identity-danger',
-              disabled: busy,
-              onClick: signOut,
-            },
-            t('signOut'),
-          ),
-        ),
-      );
-
       const accessibleName = displayName || t('menu');
       return h(
         'div',
         {
-          ref: root,
           className: 'dsh-identity-root',
           'data-collapsed': wide ? 'false' : 'true',
         },
@@ -956,6 +787,7 @@ window.__ModuleLoader__.load({
             return {
               label: chinese ? zh.signOut : en.signOut,
               busy: chinese ? zh.signingOut : en.signingOut,
+              confirm: chinese ? zh.signOutConfirm : en.signOutConfirm,
               failed: chinese ? zh.signOutFailedShort : en.signOutFailedShort,
             };
           };
@@ -963,21 +795,94 @@ window.__ModuleLoader__.load({
             const current = labels();
             root.style.setProperty('--cu-signout-label', JSON.stringify(current.label));
             root.style.setProperty('--cu-signout-busy', JSON.stringify(current.busy));
+            root.style.setProperty('--cu-signout-confirm', JSON.stringify(current.confirm));
             root.style.setProperty('--cu-signout-failed', JSON.stringify(current.failed));
           };
-          applyLabels();
-          const locale = ctx.get('locale');
-          const unsubscribe =
-            locale && typeof locale.subscribe === 'function' ? locale.subscribe(applyLabels) : undefined;
 
           const isDark = () =>
             root.getAttribute('data-ds-theme-source') === 'dark' ||
             document.body.hasAttribute('data-ds-dark-theme');
 
+          let disposed = false;
+          const timers = new Set();
+          const later = (callback, delay) => {
+            if (disposed) return 0;
+            const id = setTimeout(() => {
+              timers.delete(id);
+              callback();
+            }, delay);
+            timers.add(id);
+            return id;
+          };
+
+          const stateLabel = (anchor) => {
+            const current = labels();
+            const state = anchor.getAttribute('data-customized-state');
+            if (state === 'signing-out') return current.busy;
+            if (state === 'failed') return current.failed;
+            if (state === 'confirm') return current.confirm;
+            return current.label;
+          };
+
+          let confirmTimer;
+          let confirmAnchor;
+
+          const clearConfirm = (anchor, restoreLabel) => {
+            if (confirmTimer) {
+              clearTimeout(confirmTimer);
+              timers.delete(confirmTimer);
+              confirmTimer = undefined;
+            }
+            if (confirmAnchor === anchor) confirmAnchor = undefined;
+            if (!anchor) return;
+            if (anchor.getAttribute('data-customized-state') === 'confirm') {
+              anchor.removeAttribute('data-customized-state');
+            }
+            if (restoreLabel && anchor.isConnected) {
+              const label = stateLabel(anchor);
+              if (anchor.getAttribute('aria-label') !== label) anchor.setAttribute('aria-label', label);
+            }
+          };
+
+          const sync = () => {
+            const panel = document.querySelector('[data-shortcut-modal="settings"]');
+            if (!panel) return;
+            const anchor = panel.querySelector('a[class*="accountInfo"]');
+            if (!anchor) return;
+            if (!isDark()) {
+              if (confirmAnchor) clearConfirm(confirmAnchor, false);
+              if (anchor.dataset.customizedSignout === 'true') {
+                delete anchor.dataset.customizedSignout;
+                anchor.removeAttribute('role');
+                anchor.removeAttribute('aria-label');
+              }
+              anchor.removeAttribute('data-customized-state');
+              anchor.removeAttribute('aria-disabled');
+              return;
+            }
+            if (anchor.dataset.customizedSignout !== 'true') {
+              anchor.dataset.customizedSignout = 'true';
+              anchor.setAttribute('role', 'button');
+            }
+            const label = stateLabel(anchor);
+            if (anchor.getAttribute('aria-label') !== label) anchor.setAttribute('aria-label', label);
+          };
+
+          const finish = (anchor, state, delay) => {
+            later(() => {
+              if (!anchor.isConnected) return;
+              if (anchor.getAttribute('data-customized-state') !== state) return;
+              anchor.removeAttribute('data-customized-state');
+              anchor.removeAttribute('aria-disabled');
+              const label = stateLabel(anchor);
+              if (anchor.getAttribute('aria-label') !== label) anchor.setAttribute('aria-label', label);
+            }, delay);
+          };
+
           const signOut = async (anchor) => {
-            if (anchor.getAttribute('data-customized-state') === 'signing-out') return;
             anchor.setAttribute('data-customized-state', 'signing-out');
             anchor.setAttribute('aria-disabled', 'true');
+            anchor.setAttribute('aria-label', labels().busy);
             try {
               const remote = ctx.get('remote');
               const account = remote && remote.account;
@@ -987,25 +892,34 @@ window.__ModuleLoader__.load({
               const result = await account.signOut(accountClient(ctx));
               if (result && result.ok === false) throw new Error('sign out refused');
             } catch (error) {
-              if (!anchor.isConnected) return;
+              if (disposed || !anchor.isConnected) return;
               anchor.removeAttribute('aria-disabled');
               anchor.setAttribute('data-customized-state', 'failed');
-              setTimeout(() => {
-                if (anchor.isConnected && anchor.getAttribute('data-customized-state') === 'failed') {
-                  anchor.removeAttribute('data-customized-state');
-                }
-              }, 2400);
+              anchor.setAttribute('aria-label', labels().failed);
+              finish(anchor, 'failed', 2400);
+              return;
             }
-            setTimeout(() => {
-              if (anchor.isConnected && anchor.getAttribute('data-customized-state') === 'signing-out') {
-                anchor.removeAttribute('data-customized-state');
-                anchor.removeAttribute('aria-disabled');
-              }
-            }, 4000);
+            if (disposed) return;
+            finish(anchor, 'signing-out', 4000);
+          };
+
+          const activate = (anchor) => {
+            const state = anchor.getAttribute('data-customized-state');
+            if (state === 'signing-out') return;
+            if (state === 'confirm') {
+              clearConfirm(anchor, false);
+              void signOut(anchor);
+              return;
+            }
+            if (confirmAnchor) clearConfirm(confirmAnchor, true);
+            anchor.setAttribute('data-customized-state', 'confirm');
+            anchor.setAttribute('aria-label', labels().confirm);
+            confirmAnchor = anchor;
+            confirmTimer = later(() => clearConfirm(anchor, true), 4000);
           };
 
           const intercept = (event) => {
-            if (!isDark()) return;
+            if (!isDark() || event.button !== 0) return;
             const target =
               event.target instanceof Element
                 ? event.target.closest('a[class*="accountInfo"]')
@@ -1013,40 +927,82 @@ window.__ModuleLoader__.load({
             if (!target || !target.closest('[data-shortcut-modal="settings"]')) return;
             event.preventDefault();
             event.stopPropagation();
-            void signOut(target);
+            activate(target);
           };
 
-          const sync = () => {
-            const panel = document.querySelector('[data-shortcut-modal="settings"]');
-            if (!panel) return;
-            const anchor = panel.querySelector('a[class*="accountInfo"]');
-            if (!anchor) return;
-            if (!isDark()) {
-              if (anchor.dataset.customizedSignout === 'true') {
-                delete anchor.dataset.customizedSignout;
-                anchor.removeAttribute('role');
-                anchor.removeAttribute('aria-label');
-              }
+          const cancelConfirm = (event) => {
+            if (!confirmAnchor) return;
+            if (event.type === 'pointerdown') {
+              if (event.target instanceof Node && confirmAnchor.contains(event.target)) return;
+            } else if (event.type === 'keydown' && event.key !== 'Escape') {
               return;
             }
-            if (anchor.dataset.customizedSignout !== 'true') {
-              anchor.dataset.customizedSignout = 'true';
-              anchor.setAttribute('role', 'button');
-              anchor.setAttribute('aria-label', labels().label);
-            }
+            clearConfirm(confirmAnchor, true);
           };
 
-          const timer = setInterval(sync, 300);
+          const onKeyDown = (event) => {
+            if (event.key === 'Escape') {
+              cancelConfirm(event);
+              return;
+            }
+            if (event.repeat) return;
+            if (event.key !== ' ' && event.key !== 'Spacebar' && event.key !== 'Enter') return;
+            if (!(event.target instanceof Element)) return;
+            const target = event.target.closest('a[class*="accountInfo"]');
+            if (!target || !target.closest('[data-shortcut-modal="settings"]') || !isDark()) return;
+            event.preventDefault();
+            activate(target);
+          };
+
+          let frame = 0;
+          const scheduleSync = () => {
+            if (frame) return;
+            frame = requestAnimationFrame(() => {
+              frame = 0;
+              sync();
+            });
+          };
+
+          const observer = new MutationObserver(scheduleSync);
+          observer.observe(document.body, { childList: true, subtree: true });
+          const themeObserver = new MutationObserver(scheduleSync);
+          themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-ds-theme-source'],
+          });
+          themeObserver.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['data-ds-dark-theme'],
+          });
+
+          applyLabels();
           sync();
+          const locale = ctx.get('locale');
+          const unsubscribe =
+            locale && typeof locale.subscribe === 'function'
+              ? locale.subscribe(() => {
+                  applyLabels();
+                  scheduleSync();
+                })
+              : undefined;
+
           document.addEventListener('click', intercept, true);
-          document.addEventListener('auxclick', intercept, true);
+          document.addEventListener('pointerdown', cancelConfirm, true);
+          document.addEventListener('keydown', onKeyDown, true);
           return () => {
-            clearInterval(timer);
+            disposed = true;
+            observer.disconnect();
+            themeObserver.disconnect();
+            if (frame) cancelAnimationFrame(frame);
+            for (const id of timers) clearTimeout(id);
+            timers.clear();
             document.removeEventListener('click', intercept, true);
-            document.removeEventListener('auxclick', intercept, true);
+            document.removeEventListener('pointerdown', cancelConfirm, true);
+            document.removeEventListener('keydown', onKeyDown, true);
             unsubscribe?.();
             root.style.removeProperty('--cu-signout-label');
             root.style.removeProperty('--cu-signout-busy');
+            root.style.removeProperty('--cu-signout-confirm');
             root.style.removeProperty('--cu-signout-failed');
           };
         }, 'customized-ui: account sign out');
@@ -1064,6 +1020,25 @@ window.__ModuleLoader__.load({
         emptySeat('sidebar.brand.mark');
         emptySeat('sidebar.brand.name');
         emptySeat('settings.action', 'open-document');
+        ctx.slots.inject('conversation.input.model.label', () =>
+          ctx.slots.register(
+            { name: 'conversation.input.model.label', priority: hidden },
+            ModelLabel,
+          ),
+        );
+        const t = ctx.locale.bind(NS);
+        ctx.slots.inject('sidebar.panellist', () =>
+          ctx.slots.register(
+            {
+              name: 'sidebar.panellist',
+              id: 'schedules',
+              order: 10,
+              priority: hidden,
+              label: () => t('tasks'),
+            },
+            TasksIcon,
+          ),
+        );
         ctx.slots.inject('settings.launcher', () =>
           ctx.slots.register(
             { name: 'settings.launcher', priority: hidden, locale: NS },
